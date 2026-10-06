@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% from "base.html" import card %}
+{% block title %}Movies{% endblock %}
+{% block content %}
+<h1>All movies</h1>
+<form class="filters" method="get">
+  <input type="text" id="live-search" name="q" value="{{ q }}" placeholder="Search by title...">
+  <select name="genre">
+    <option value="">All genres</option>
+    {% for g in genres %}<option value="{{ g }}" {{ 'selected' if g == genre }}>{{ g }}</option>{% endfor %}
+  </select>
+  <button class="btn" type="submit">Filter</button>
+</form>
+{% if movies %}
+<div class="grid" id="movie-grid">{% for m in movies %}{{ card(m) }}{% endfor %}</div>
+{% else %}
+<p class="muted">No movies found.</p>
+{% endif %}
+{% endblock %}

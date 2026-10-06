@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% from "base.html" import card %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>Find your next favourite movie</h1>
+  <p class="muted">Browse, rate and get recommendations based on what you love.</p>
+  <form class="search" action="{{ url_for('movies') }}" method="get">
+    <input type="text" name="q" placeholder="Search movies..." aria-label="Search movies">
+    <button class="btn" type="submit">Search</button>
+  </form>
+  <p>{% for g in genres %}<a class="chip link" href="{{ url_for('movies', genre=g) }}">{{ g }}</a>{% endfor %}</p>
+</section>
+<h2>Top rated</h2>
+<div class="grid">{% for m in top %}{{ card(m) }}{% endfor %}</div>
+{% endblock %}

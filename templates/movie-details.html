@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% from "base.html" import card %}
+{% block title %}{{ movie['title'] }}{% endblock %}
+{% block content %}
+<article class="details">
+  <div class="poster big" style="--h: {{ (movie['id'] * 47) % 360 }}">{{ movie['emoji'] }}</div>
+  <div>
+    <h1>{{ movie['title'] }} <span class="muted">({{ movie['year'] }})</span></h1>
+    <p>{% for g in movie['genres']|genre_list %}<span class="chip">{{ g }}</span>{% endfor %}</p>
+    <p class="muted">Directed by {{ movie['director'] }} · Critic score ⭐ {{ movie['score'] }}</p>
+    <p>{{ movie['description'] }}</p>
+    <p class="muted">
+      {% if stats['n'] %}Community rating: {{ '%.1f'|format(stats['avg']) }}/5 ({{ stats['n'] }} rating{{ 's' if stats['n'] != 1 }})
+      {% else %}No community ratings yet.{% endif %}
+    </p>
+    <form method="post" class="rate">
+      <label>{{ 'Your rating:' if my_rating else 'Rate this movie:' }}</label>
+      <div class="stars">
+        {% for i in range(1, 6) %}
+          <button type="submit" name="rating" value="{{ i }}" class="star {{ 'on' if my_rating and i <= my_rating }}" title="{{ i }} star{{ 's' if i > 1 }}">★</button>
+        {% endfor %}
+      </div>
+    </form>
+  </div>
+</article>
+{% if similar %}
+<h2>More like this</h2>
+<div class="grid">{% for m in similar %}{{ card(m) }}{% endfor %}</div>
+{% endif %}
+{% endblock %}

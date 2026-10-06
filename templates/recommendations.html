@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% from "base.html" import card %}
+{% block title %}Recommendations{% endblock %}
+{% block content %}
+<h1>Recommendations</h1>
+<form method="get" class="genre-picker">
+  <p class="muted">Pick genres you enjoy:</p>
+  {% for g in genres %}
+    <label class="chip check"><input type="checkbox" name="genre" value="{{ g }}" {{ 'checked' if g in picked }}> {{ g }}</label>
+  {% endfor %}
+  <p><button class="btn" type="submit">Recommend</button></p>
+</form>
+
+{% if mode == 'personal' %}
+  <p class="notice">Picked for you{% if liked %} because you like {{ liked|join(', ') }}{% endif %}.</p>
+{% elif mode == 'genres' %}
+  <p class="notice">Top movies in: {{ picked|join(', ') }}.</p>
+{% else %}
+  <p class="notice">
+    Showing top-rated movies.
+    {% if current_user %}Rate a few movies to get personal picks.{% else %}<a href="{{ url_for('login') }}">Log in</a> and rate movies for personal picks.{% endif %}
+  </p>
+{% endif %}
+<div class="grid">{% for m in movies %}{{ card(m) }}{% endfor %}</div>
+{% endblock %}
